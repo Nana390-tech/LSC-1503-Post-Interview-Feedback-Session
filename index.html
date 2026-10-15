@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Debrief</title>
+<style>
+:root{
+  --ink:#233142; --ink2:#34495E; --ink-l:#E7ECF2;
+  --lime:#8CBF2F; --lime-d:#5E8A12; --lime-l:#EEF7DC;
+  --pink:#E2457A; --pink-d:#B02A58; --pink-l:#FCE3EC;
+  --gold:#F2B33D; --bg:#F5F7FA; --line:#DCE3EA; --muted:#64707D; --text:#1E2630;
+  --good:#3E9B4F; --bad:#D04545;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+header{background:var(--ink);color:#fff;padding:16px 18px 12px;position:sticky;top:0;z-index:20;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;max-width:1060px;margin:auto}
+header h1{margin:0;font-family:Georgia,serif;font-size:1.4rem}
+header h1 span{color:var(--lime)}
+header .sub{font-size:.84rem;opacity:.85}
+.stats{display:flex;gap:8px}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:5px 12px;border-radius:999px;font-weight:600;font-size:.88rem}
+nav{max-width:1060px;margin:12px auto 0;display:flex;gap:6px;flex-wrap:wrap}
+nav button{flex:1;min-width:96px;border:none;background:rgba(255,255,255,.1);color:#fff;padding:7px 6px;border-radius:10px;font-weight:600;cursor:pointer;font-size:.84rem}
+nav button.active{background:var(--lime);color:var(--ink)}
+nav button .ph{display:block;font-size:.66rem;opacity:.75;font-weight:500;text-transform:uppercase;letter-spacing:.6px}
+main{max-width:1060px;margin:22px auto 90px;padding:0 16px}
+section{display:none;animation:fade .35s}
+section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(35,49,66,.05)}
+.tagp{display:inline-block;background:var(--ink-l);color:var(--ink);font-weight:700;font-size:.74rem;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:6px}
+.tagp.lime{background:var(--lime-l);color:var(--lime-d)}.tagp.pink{background:var(--pink-l);color:var(--pink-d)}
+h2{font-family:Georgia,serif;color:var(--ink);margin:.2em 0 .4em;font-size:1.5rem}
+h3{color:var(--pink-d);margin:.4em 0}
+.btn{background:var(--ink);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-size:.95rem;margin:4px 6px 4px 0}
+.btn:hover{background:var(--ink2)}
+.btn.lime{background:var(--lime);color:var(--ink)}.btn.lime:hover{background:var(--lime-d);color:#fff}
+.btn.pink{background:var(--pink)}.btn.pink:hover{background:var(--pink-d)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+input[type=text],textarea{width:100%;padding:10px 12px;border:2px solid var(--line);border-radius:10px;font:inherit;background:#FBFCFD}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--lime)}
+textarea{min-height:88px;resize:vertical}
+label{font-weight:600;display:block;margin:12px 0 5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.grid2,.grid4{grid-template-columns:1fr}}
+.helper{font-size:.86rem;color:var(--muted);margin:3px 0 6px}
+.feedback{margin-top:10px;padding:10px 14px;border-radius:10px;font-weight:600;display:none}
+.feedback.show{display:block}.feedback.ok{background:#E3F4E6;color:#22652F}.feedback.no{background:#FBE4E4;color:#9B2C2C}
+.wc{font-size:.8rem;color:var(--muted);text-align:right;margin-top:3px}.wc.okc{color:var(--good);font-weight:700}
+.qnum{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--lime);align-items:center;justify-content:center;font-weight:800;margin-right:8px;font-size:.9rem}
+.lpa-q{margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.steps-teams{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.steps-teams div{flex:1;min-width:170px;background:var(--lime-l);border-radius:12px;padding:10px 12px;font-size:.9rem}
+.steps-teams b{color:var(--lime-d)}
+/* report card */
+.rc{border-radius:14px;border:2px solid var(--line);padding:14px;background:#fff;text-align:center;cursor:pointer;transition:.2s;position:relative}
+.rc:hover{border-color:var(--ink2)}
+.rc .ic{font-size:2rem}
+.rc .nm{font-weight:800;color:var(--ink);margin-top:4px}
+.rc.vs{box-shadow:0 0 0 4px var(--lime)}.rc.vp{box-shadow:0 0 0 4px var(--pink)}
+.rc .grade{display:none;margin-top:8px;font-weight:800;padding:4px 8px;border-radius:8px;font-size:.85rem}
+.revealed .rc .grade{display:block}
+.g-ex{background:#E3F4E6;color:#22652F}.g-nw{background:#FFF1D6;color:#8A5A00}.g-bp{background:var(--pink-l);color:var(--pink-d)}
+.rc .det{display:none;font-size:.85rem;color:var(--muted);margin-top:6px;text-align:left}
+.revealed .rc .det{display:block}
+.vote-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.vote-row .mode{padding:8px 14px;border-radius:999px;border:2px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
+.vote-row .mode.on.s{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.vote-row .mode.on.p{background:var(--pink);border-color:var(--pink);color:#fff}
+/* sort */
+.sitem{border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;background:#fff}
+.sitem .q{font-size:.82rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.sitem .a{margin:4px 0 8px;font-style:italic}
+.sitem .opts button{border:2px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;margin:2px 4px 2px 0;cursor:pointer;font-weight:700}
+.sitem .opts button.picked{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sitem.right{border-color:var(--good);background:#EEF8F0}.sitem.wrong{border-color:var(--bad);background:#FCEFEF}
+.sitem .why{display:none;font-size:.86rem;margin-top:6px;color:var(--ink2)}
+.sitem.right .why,.sitem.wrong .why{display:block}
+/* error hunt */
+.err{border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;background:#fff}
+.err .wrongs{font-weight:600;color:var(--pink-d)}
+.err .wrongs s{text-decoration-color:var(--pink)}
+.eopt{display:block;width:100%;text-align:left;border:2px solid var(--line);background:#fff;padding:8px 12px;border-radius:9px;margin:5px 0;cursor:pointer;font:inherit}
+.eopt:hover{border-color:var(--lime)}
+.eopt.right{border-color:var(--good);background:#EEF8F0}.eopt.wrong{border-color:var(--bad);background:#FCEFEF}
+.err .tip{display:none;font-size:.86rem;color:var(--ink2);margin-top:4px}
+.err.done .tip{display:block}
+/* explain */
+.area{display:grid;grid-template-columns:70px 1fr;gap:14px;align-items:start;border-radius:14px;padding:14px;margin-bottom:12px;background:#fff;border:2px solid var(--line)}
+.area .big{width:70px;height:70px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.area h4{margin:0 0 4px;font-size:1.1rem;color:var(--ink)}
+.area .lvl{font-size:.75rem;font-weight:800;padding:3px 8px;border-radius:6px;margin-left:6px;vertical-align:middle}
+.area ul{margin:6px 0 0;padding-left:18px}
+.are{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.are{grid-template-columns:1fr}}
+.are div{border-radius:14px;padding:14px;color:#fff}
+.are .a1{background:var(--ink)}.are .a2{background:var(--lime-d)}.are .a3{background:var(--pink)}
+.are h4{margin:0;font-size:1.25rem}.are p{margin:6px 0 0;font-size:.92rem}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.compare{grid-template-columns:1fr}}
+.compare div{border-radius:12px;padding:14px;border:2px solid var(--line)}
+.compare .sh{background:#FCEFEF;border-color:#F2C4C4}.compare .dp{background:#EEF8F0;border-color:#BFE3C6}
+.m1{background:#DDE5EE;border-bottom:3px solid var(--ink);padding:1px 2px}
+.m2{background:var(--lime-l);border-bottom:3px solid var(--lime-d);padding:1px 2px}
+.m3{background:var(--pink-l);border-bottom:3px solid var(--pink);padding:1px 2px}
+.prep li{margin:6px 0}
+/* extend */
+.qpick{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.qpick button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:.88rem}
+.qpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.check-list label{font-weight:500;display:flex;gap:8px;align-items:center;margin:6px 0}
+/* evaluate */
+.rate{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-bottom:1px dashed var(--line)}
+.rate .lv button{width:42px;height:42px;border-radius:10px;border:2px solid var(--line);background:#fff;font-weight:800;cursor:pointer;margin-left:4px}
+.rate .lv button.on{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.scale{font-size:.82rem;color:var(--muted)}
+.quiz-opt{display:block;width:100%;text-align:left;border:2px solid var(--line);background:#fff;padding:10px 14px;border-radius:10px;margin:7px 0;cursor:pointer;font:inherit}
+.quiz-opt:hover{border-color:var(--lime)}
+.quiz-opt.right{border-color:var(--good);background:#EEF8F0}.quiz-opt.wrong{border-color:var(--bad);background:#FCEFEF}
+.progress{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 14px}
+.progress div{height:100%;background:linear-gradient(90deg,var(--lime),var(--pink));width:0;transition:.4s}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{flex:1;min-width:140px;border:2px dashed var(--line);border-radius:12px;padding:10px;text-align:center;opacity:.45;font-size:.85rem}
+.badge.on{opacity:1;border-style:solid;border-color:var(--lime);background:var(--lime-l)}
+.badge .ic{font-size:1.8rem}
+.cert{border:10px double var(--ink);border-radius:14px;padding:34px 24px;text-align:center;background:linear-gradient(135deg,#F7FBEF,#FDF0F5)}
+.cert h2{font-size:2rem}
+.cert .nm{font-family:Georgia,serif;font-size:2rem;color:var(--pink-d);border-bottom:2px solid var(--lime);display:inline-block;padding:0 20px 4px;margin:10px 0}
+#glossBtn{position:fixed;right:18px;bottom:18px;background:var(--pink);color:#fff;border:none;border-radius:999px;padding:13px 18px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer;z-index:30}
+#gloss{position:fixed;inset:0;background:rgba(20,28,38,.6);display:none;z-index:40;align-items:center;justify-content:center;padding:16px}
+#gloss.show{display:flex}
+#gloss .inner{background:#fff;border-radius:16px;max-width:820px;width:100%;max-height:86vh;overflow:auto;padding:20px}
+.flips{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.flip{perspective:700px;height:92px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-weight:700}
+.flip .f{background:var(--ink-l);color:var(--ink)}
+.flip .b{background:var(--lime);color:var(--ink);transform:rotateY(180deg);font-size:1.15rem;direction:rtl}
+#toast{position:fixed;left:50%;top:160px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;transition:.3s;z-index:50;pointer-events:none}
+#toast.show{opacity:1}
+canvas#conf{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
+.navrow{display:flex;justify-content:space-between;margin-top:8px}
+#printArea{display:none}
+@media print{
+  body{background:#fff}
+  header,nav,main,footer,#glossBtn,#toast,canvas,#gloss{display:none!important}
+  #printArea{display:block;font-size:11pt;color:#000}
+  #printArea h1{font-family:Georgia,serif;color:#233142;margin:0 0 4px}
+  #printArea h2{font-size:13pt;color:#B02A58;border-bottom:2px solid #8CBF2F;padding-bottom:3px;margin-top:18px}
+  #printArea .pq{font-weight:700;margin-top:10px}
+  #printArea .pa{border:1px solid #bbb;border-radius:6px;padding:6px 8px;min-height:30px;white-space:pre-wrap}
+  .pcert{page-break-before:always}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <div><h1>Interview <span>Debrief</span></h1><div class="sub">LSC 1503 · LPA 6 + feedback lesson: what we did, what's expected</div></div>
+    <div class="stats"><span class="pill">⭐ <span id="pts">0</span> pts</span><span class="pill">🏅 <span id="bcount">0</span>/6</span></div>
+  </div>
+  <nav id="nav"></nav>
+</header>
+
+<main>
+<!-- START -->
+<section id="s-start">
+  <div class="card">
+    <span class="tagp">Welcome</span>
+    <h2>The interview is over. Let's look at it together.</h2>
+    <p>First, you will reflect on your own interview (<b>LPA 6</b>). Then you will hear the <b>class feedback</b> and learn what a strong interview answer looks like.</p>
+    <div class="grid2">
+      <div><label for="sname">Your name</label><input type="text" id="sname" placeholder="e.g. Mariam Al Ali"></div>
+      <div><label for="sid">Student ID / Class</label><input type="text" id="sid" placeholder="e.g. H00123456 / LSC 1503-02"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🎯 Lesson objectives</h3>
+    <p><b>By the end of this lesson, you will…</b></p>
+    <ul>
+      <li>reflect honestly on your interview performance (LPA 6)</li>
+      <li>understand the class feedback on professionalism, language, depth and preparation</li>
+      <li>improve a weak answer using <b>Answer + Reason + Example</b></li>
+      <li>make a preparation plan for your video portfolio</li>
+    </ul>
+  </div>
+  <div class="card"><h3>🏅 Badges</h3><div class="badges" id="badgeWall"></div></div>
+  <div class="card">
+    <h3>💾 Save your work</h3>
+    <p class="helper">Download your progress as a file. Load it next time to continue.</p>
+    <button class="btn lime" onclick="saveJSON()">⬇ Save progress</button>
+    <label class="btn ghost" style="display:inline-block">⬆ Load progress<input type="file" accept=".json" hidden onchange="loadJSON(event)"></label>
+  </div>
+  <div class="navrow"><span></span><button class="btn" onclick="go(1)">Start → Part 1: LPA 6</button></div>
+</section>
+
+<!-- LPA 6 -->
+<section id="s-lpa">
+  <div class="card">
+    <span class="tagp lime">Part 1 · Reflection</span>
+    <h2>LPA 6 · My Interview Reflection</h2>
+    <p>Before the class feedback, reflect on <b>your own</b> interview. Answer honestly in <b>3–4 full sentences</b> per question. Your answers do <b>not</b> change your interview grade.</p>
+    <div class="steps-teams" style="margin-bottom:12px">
+      <div><b>Part 1</b> · Before the interview (Q1–2)</div>
+      <div><b>Part 2</b> · During the interview (Q3–4)</div>
+      <div><b>Part 3</b> · After the interview (Q5–6)</div>
+    </div>
+    <a class="btn lime" href="https://nana390-tech.github.io/LSC-1503-LPA-6/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">📝 Open LPA 6 (new tab)</a>
+  </div>
+  <div class="card">
+    <h3>📤 How to submit on Teams</h3>
+    <div class="steps-teams">
+      <div><b>1.</b> Answer all 6 questions in LPA 6.</div>
+      <div><b>2.</b> Click <b>Print or save as PDF</b> and choose <b>Save as PDF</b>.</div>
+      <div><b>3.</b> Name it: <b>LPA6_YourName</b>.</div>
+      <div><b>4.</b> Upload it to <b>your folder on Teams</b>.</div>
+    </div>
+    <label class="check-list" style="font-weight:500;display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="lpaDone"> I have uploaded my LPA 6 PDF to my Teams folder.</label>
+    <button class="btn lime" onclick="submitLPA()">✅ Confirm and continue</button>
+    <div class="feedback" id="lpaFb"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="go(0)">← Back</button><button class="btn" onclick="go(2)">Next → Part 2: Engage</button></div>
+</section>
+
+<!-- ENGAGE -->
+<section id="s-engage">
+  <div class="card">
+    <span class="tagp pink">Part 2 · Engage</span>
+    <h2>Guess the class report card</h2>
+    <p>Your teacher looked at <b>four areas</b> in the interviews. What do you think?</p>
+    <div class="vote-row">
+      <button class="mode s on" id="mS" onclick="setMode('s')">👍 Pick the STRONGEST area</button>
+      <button class="mode p" id="mP" onclick="setMode('p')">⚠️ Pick the BIGGEST problem</button>
+    </div>
+    <div class="grid4" id="rcGrid"></div>
+    <div style="margin-top:14px">
+      <button class="btn pink" onclick="reveal()">🔓 Reveal the report card</button>
+    </div>
+    <div class="feedback" id="rcFb"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="go(1)">← Back</button><button class="btn" onclick="go(3)">Next → Explore</button></div>
+</section>
+
+<!-- EXPLORE -->
+<section id="s-explore">
+  <div class="card">
+    <span class="tagp pink">Part 2 · Explore</span>
+    <h2>Investigation 1 · Shallow or deep?</h2>
+    <p>Read each interview answer. Is it <b>shallow</b> (too short, no reason, no example) or <b>deep</b> (clear answer + reason + example)?</p>
+    <div id="sortList"></div>
+    <button class="btn lime" onclick="checkSort()">Check my answers</button>
+    <div class="feedback" id="sortFb"></div>
+  </div>
+  <div class="card">
+    <h2>Investigation 2 · Error hunt</h2>
+    <p>These mistakes are <b>typical</b> of the interviews. Choose the <b>correct</b> sentence.</p>
+    <div id="errList"></div>
+    <div class="feedback" id="errFb"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="go(2)">← Back</button><button class="btn" onclick="go(4)">Next → Explain</button></div>
+</section>
+
+<!-- EXPLAIN -->
+<section id="s-explain">
+  <div class="card">
+    <span class="tagp pink">Part 2 · Explain</span>
+    <h2>Class feedback &amp; expectations</h2>
+    <div class="area" style="border-color:#BFE3C6"><div class="big" style="background:#E3F4E6">👔</div><div><h4>Professionalism <span class="lvl g-ex">EXCELLENT</span></h4>Everyone was professional. You came <b>on time</b>, you were <b>dressed well</b>, and you were polite. <b>Keep doing this!</b> It is the first thing an employer notices.</div></div>
+    <div class="area" style="border-color:#F5DCA3"><div class="big" style="background:#FFF1D6">🗣️</div><div><h4>Language <span class="lvl g-nw">NEEDS WORK</span></h4>Some students had weak language. Common problems:
+      <ul><li><b>Verb forms:</b> "I am study" → "I study"; "it give" → "it gives"</li><li><b>Past tense:</b> "Last year I join" → "Last year I joined"</li><li><b>Prepositions:</b> "good in" → "good at"</li><li><b>Articles:</b> "a engineer" → "an engineer"; "I am shy person" → "I am a shy person"</li></ul>
+      <b>Expectation:</b> practise speaking <b>every day</b>, not only the day before the exam.</div></div>
+    <div class="area" style="border-color:#F5DCA3"><div class="big" style="background:#FFF1D6">🔍</div><div><h4>Depth of answers <span class="lvl g-nw">NEEDS WORK</span></h4>Some answers were <b>too short</b>. "Yes, I like teamwork." is not enough. The examiner wants to know <b>why</b> and <b>when</b>.<br><b>Expectation:</b> every answer has an <b>Answer + Reason + Example</b> (see below).</div></div>
+    <div class="area" style="border-color:#F2B8CB"><div class="big" style="background:var(--pink-l)">📋</div><div><h4>Preparedness <span class="lvl g-bp">BIGGEST PROBLEM</span></h4>Some students <b>did not prepare</b>, so they could not answer as expected. You had the questions, the apps and sample answers <b>before</b> the interview. A prepared answer comes from <b>practice</b>, not from luck on the day.</div></div>
+  </div>
+  <div class="card">
+    <h2>The formula: Answer + Reason + Example</h2>
+    <div class="are">
+      <div class="a1"><h4>A · Answer</h4><p>Answer the question directly in one sentence.</p><p><i>"My biggest strength is teamwork."</i></p></div>
+      <div class="a2"><h4>R · Reason</h4><p>Say <b>why</b>. Use <i>because…</i></p><p><i>"…because I listen to others and share ideas."</i></p></div>
+      <div class="a3"><h4>E · Example</h4><p>Give a <b>real</b> example from your life.</p><p><i>"For example, in my LSC group project…"</i></p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Shallow vs deep: same question</h3>
+    <p class="helper"><b>Question:</b> What is your biggest strength?</p>
+    <div class="compare">
+      <div class="sh"><b>❌ Shallow</b><p><i>"Teamwork. I am good in teamwork."</i></p><p class="helper">Short, no reason, no example, one language error.</p></div>
+      <div class="dp"><b>✅ Deep</b><p><span class="m1">My biggest strength is teamwork.</span> <span class="m2">I am good at it because I listen to others and I am happy to share ideas.</span> <span class="m3">For example, in my LSC group project, two members disagreed, so I helped them agree on one plan, and we finished on time.</span></p></div>
+    </div>
+    <button class="btn ghost" style="margin-top:10px" onclick="speakText(document.querySelector('.compare .dp p').innerText)">🔊 Listen to the deep answer</button>
+  </div>
+  <div class="card">
+    <h3>What does "prepared" mean?</h3>
+    <p>A prepared student did these things <b>before</b> the interview:</p>
+    <ul class="prep">
+      <li>📄 Read all the interview questions</li>
+      <li>✍️ Wrote notes or a short script for each question</li>
+      <li>🗣️ Practised out loud, many times, with a friend or family member</li>
+      <li>⏱️ Practised with a timer (3–5 minutes)</li>
+      <li>🧠 Prepared 2–3 real examples from their own life</li>
+      <li>📚 Checked new vocabulary and pronunciation</li>
+    </ul>
+    <p><b>How many did you do?</b> Count them and be honest with yourself.</p>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="go(3)">← Back</button><button class="btn" onclick="go(5)">Next → Extend</button></div>
+</section>
+
+<!-- EXTEND -->
+<section id="s-extend">
+  <div class="card">
+    <span class="tagp pink">Part 2 · Extend</span>
+    <h2>Answer makeover</h2>
+    <p>Choose the question you answered <b>weakest</b> in your interview. Rewrite your answer using the formula. Aim for <b>50–90 words</b>.</p>
+    <div class="qpick" id="qpick"></div>
+    <label>Or type the question here</label><input type="text" id="mkQ" placeholder="The interview question">
+    <label>❌ What I said in the interview (as well as you remember)</label>
+    <textarea id="mkOld" style="min-height:60px"></textarea>
+    <label>A · Answer</label><textarea id="mkA" style="min-height:60px" oninput="countMk()" placeholder="Answer the question directly."></textarea>
+    <label>R · Reason</label><textarea id="mkR" style="min-height:60px" oninput="countMk()" placeholder="…because…"></textarea>
+    <label>E · Example</label><textarea id="mkE" style="min-height:70px" oninput="countMk()" placeholder="For example, …"></textarea>
+    <div class="wc" id="mkWc">0 words · target 50–90</div>
+    <button class="btn lime" onclick="saveMk()">💾 Save my makeover</button>
+    <div class="feedback" id="mkFb"></div>
+  </div>
+  <div class="card check-list">
+    <h3>🤝 Partner check</h3>
+    <p class="helper">Swap with a partner. Read their new answer and tick what you see.</p>
+    <label><input type="checkbox" class="pc"> The answer is clear in the first sentence.</label>
+    <label><input type="checkbox" class="pc"> There is a reason with <i>because</i>.</label>
+    <label><input type="checkbox" class="pc"> There is a real, personal example.</label>
+    <label><input type="checkbox" class="pc"> The verbs are correct (present / past).</label>
+    <label><input type="checkbox" class="pc"> It is better than the old answer!</label>
+    <button class="btn" onclick="partnerDone()">✅ Partner check done</button>
+    <div class="feedback" id="pcFb"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="go(4)">← Back</button><button class="btn" onclick="go(6)">Next → Evaluate</button></div>
+</section>
+
+<!-- EVALUATE -->
+<section id="s-evaluate">
+  <div class="card">
+    <span class="tagp pink">Part 2 · Evaluate</span>
+    <h2>Self-check</h2>
+    <p>Rate <b>your own</b> interview in each area. <span class="scale">1 = weak · 2 = OK · 3 = good · 4 = excellent</span></p>
+    <div id="rateList"></div>
+  </div>
+  <div class="card">
+    <h3>📌 My preparation pledge</h3>
+    <label>For my video portfolio, I will prepare by…</label>
+    <textarea id="pledge" placeholder="e.g. writing my script one week before and practising it out loud three times with my sister."></textarea>
+    <button class="btn lime" onclick="savePledge()">💾 Save my pledge</button>
+    <div class="feedback" id="pledgeFb"></div>
+  </div>
+  <div class="card">
+    <h3>📝 Check quiz (8 questions · 80% for the certificate)</h3>
+    <div class="progress"><div id="qbar"></div></div>
+    <div id="quizBox"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="go(5)">← Back</button><button class="btn" onclick="go(7)">Next → Certificate</button></div>
+</section>
+
+<!-- CERT -->
+<section id="s-cert">
+  <div class="card">
+    <div id="certWrap"></div>
+    <div style="text-align:center;margin-top:16px">
+      <button class="btn" onclick="printMode('all')">🖨 Print / Save all my work as PDF</button>
+      <button class="btn lime" onclick="saveJSON()">⬇ Save progress file</button>
+    </div>
+  </div>
+  <div class="card"><h3>🏅 My badges</h3><div class="badges" id="badgeWall2"></div></div>
+  <div class="navrow"><button class="btn ghost" onclick="go(6)">← Back</button><span></span></div>
+</section>
+</main>
+
+<footer>Designed by: Nazila Motahari · LSC 1503 Professional Spoken Communication</footer>
+
+<button id="glossBtn" onclick="toggleGloss(true)">📘 Glossary EN/AR</button>
+<div id="gloss" onclick="if(event.target===this)toggleGloss(false)">
+  <div class="inner">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">Glossary · المسرد</h2><button class="btn ghost" onclick="toggleGloss(false)">✕ Close</button></div>
+    <p class="helper">Tap a card to see the Arabic meaning.</p>
+    <div class="flips" id="flips"></div>
+  </div>
+</div>
+<div id="toast"></div>
+<canvas id="conf"></canvas>
+<div id="printArea"></div>
+
+<script>
+/* ---------- DATA ---------- */
+const PHASES=[["start","Welcome","Start"],["lpa","LPA 6","Part 1"],["engage","Engage","Part 2"],["explore","Explore","Part 2"],["explain","Explain","Part 2"],["extend","Extend","Part 2"],["evaluate","Evaluate","Part 2"],["cert","Certificate","Finish"]];
+const AREAS=[
+ {k:"prof",ic:"👔",nm:"Professionalism",g:"EXCELLENT",c:"g-ex",d:"On time, well dressed, polite. Well done, everyone!"},
+ {k:"lang",ic:"🗣️",nm:"Language",g:"NEEDS WORK",c:"g-nw",d:"Some weak grammar and vocabulary. More practice needed."},
+ {k:"depth",ic:"🔍",nm:"Depth of answers",g:"NEEDS WORK",c:"g-nw",d:"Some answers were too short, with no reason or example."},
+ {k:"prep",ic:"📋",nm:"Preparedness",g:"BIGGEST PROBLEM",c:"g-bp",d:"Some students did not prepare and could not answer as expected."}
+];
+const SORT=[
+ ["Tell me about yourself.","I am Ahmed. I am 19. I study at HCT.","s","Only basic facts. No interests, goals or details."],
+ ["Tell me about yourself.","My name is Ahmed and I am a first-year student at HCT. I am interested in technology because I enjoy solving problems. For example, I fix my family's phones and laptops at home.","d","Clear answer, a reason (because…) and a personal example."],
+ ["How do you organise your studies?","I study at night.","s","Too short. How? Why? When?"],
+ ["How do you organise your studies?","I use a weekly planner because it helps me remember my deadlines. For example, every Sunday I write my assignments and the days I will work on them.","d","Answer + reason + a real example."],
+ ["What is your weakness?","I don't have weaknesses.","s","Not honest, and no reflection. Everyone has a weakness."],
+ ["What is your weakness?","My weakness is that I am sometimes shy when I speak in English. I am working on it because it is important for my career. For example, I now answer one question in every class.","d","Honest, with a reason and an action plan."],
+ ["Where do you see yourself in five years?","Working. Maybe in a company.","s","Vague. Which job? Why?"],
+ ["Tell me about a time you worked in a team.","Last semester I worked with three classmates on a report. I organised the meetings because our group was not communicating. In the end, we submitted early and got a good mark.","d","Specific situation, action, reason and result."]
+];
+const ERR=[
+ {w:"I am study at HCT.",o:["I study at HCT.","I am studying in at HCT.","I studying at the HCT.","I am studied at HCT."],a:0,t:"Use the present simple: I study."},
+ {w:"I have 19 years old.",o:["I have nineteen years.","I am 19 years old.","I am have 19 years.","My age have 19 years."],a:1,t:"In English we use BE for age: I am 19."},
+ {w:"I like teamwork because it give me new ideas.",o:["…because it giving me new ideas.","…because it gives me new ideas.","…because they gives me new ideas.","…because it is give me new ideas."],a:1,t:"He / she / it + verb-s: it gives."},
+ {w:"Last year I join a volunteer program.",o:["Last year I joining a volunteer program.","Last year I am join a volunteer program.","Last year I joined a volunteer program.","Last year I was join a volunteer program."],a:2,t:"Past time → past simple: joined."},
+ {w:"I am good in communication.",o:["I am good on communication.","I am good at communication.","I am good for communication.","I am good with the communicate."],a:1,t:"good AT something."},
+ {w:"In the future I want to be a engineer.",o:["…I want to be engineer.","…I want to be an engineer.","…I want be an engineer.","…I want to be the engineers."],a:1,t:"Use 'an' before a vowel sound: an engineer."},
+ {w:"My weakness is I am shy person.",o:["My weakness is that I am a shy person.","My weakness is that I am shy a person.","My weakness is I am the shy person.","My weakness are that I am shy person."],a:0,t:"A singular job/person noun needs 'a': a shy person."},
+ {w:"I very like helping people.",o:["I like very helping people.","I very much like helping the people.","I really like helping people.","I am very like helping people."],a:2,t:"Use 'really like' or 'like … very much', not 'very like'."},
+ {w:"When I will graduate, I want to work in ADNOC.",o:["When I graduate, I want to work for ADNOC.","When I will graduated, I want to work in ADNOC.","When I am graduate, I want to work at ADNOC.","When I will graduate, I want work for ADNOC."],a:0,t:"After 'when' (future), use the present: When I graduate."},
+ {w:"The interview was very stress for me.",o:["The interview was very stressing for me.","The interview was very stressful for me.","The interview was very stressed for me.","The interview was very stresses to me."],a:1,t:"Adjective: stressful (the thing causes stress)."}
+];
+const MK_QS=["Tell me about yourself.","How do you organise your studies?","What are your strengths?","What is your weakness?","Tell me about a time you worked in a team.","Tell me about a challenge you faced.","Where do you see yourself in five years?"];
+const QUIZ=[
+ {q:"What was the class's strongest area in the interviews?",o:["Professionalism","Preparedness","Depth of answers","Grammar and vocabulary"],a:0},
+ {q:"What was the class's biggest problem?",o:["Coming late to the interview","Preparedness","Wearing the wrong clothes","Speaking too slowly"],a:1},
+ {q:"What does A + R + E stand for?",o:["Answer + Reason + Example","Ask + Repeat + End","Answer + Repeat + Explain","Attitude + Reason + Effort"],a:0},
+ {q:"Which answer is the deepest?",o:["I like teamwork a lot, and I think teamwork is really very good for everyone.","Teamwork is good. Many people like it, and my friends and family like it too.","I like teamwork because I learn from others, for example in my group project.","Yes, I like teamwork very much because I like it and it is nice to have."],a:2},
+ {q:"Which sentence is correct?",o:["Last year I join a club.","Last year I joined a club.","Last year I am join a club.","Last year I joining a club."],a:1},
+ {q:"Which is the best way to prepare for an interview?",o:["Read the questions once the night before.","Practise out loud many times with examples.","Memorise one long answer for every question.","Wait and think of answers on the day."],a:1},
+ {q:"The examiner asks, \"What is your weakness?\" What is the best start?",o:["I don't have any weaknesses at all.","My weakness is that I am sometimes shy.","I don't know, maybe nothing, I think.","My weakness is my friends, sometimes."],a:1},
+ {q:"Why is a personal example important?",o:["It makes the answer longer but not better.","It shows the examiner your answer is real.","It is only needed for the first question.","It helps you avoid giving a reason."],a:1}
+];
+const GLOSS=[["feedback","ملاحظات / تغذية راجعة"],["professionalism","الاحترافية"],["punctual / on time","في الموعد"],["preparedness","الاستعداد"],["prepare","يستعدّ"],["depth","عُمق"],["shallow","سطحي"],["reason","سبب"],["example","مثال"],["expectation","توقُّع / المطلوب"],["strength","نقطة قوة"],["weakness","نقطة ضعف"],["improve","يُحسِّن"],["practise","يتدرَّب"],["grammar","القواعد"],["vocabulary","المفردات"],["examiner","المُمتحِن"],["reflect","يتأمَّل / يراجع"],["honest","صادق"],["pledge","تعهُّد"],["confident","واثق"],["stressful","مُرهِق / مُجهِد"]];
+const BADGES=[["lpa","📝","Honest Reflector","Submit LPA 6"],["guess","🔮","Report Card Reader","Reveal the report card"],["depth","🔍","Depth Detective","Sort all 8 answers"],["err","🛠️","Error Fixer","Fix 8+ errors"],["mk","✨","Makeover Master","Rewrite a weak answer"],["quiz","🏆","Quiz Champion","Score 80% or more"]];
+
+/* ---------- STATE ---------- */
+let S={pts:0,badges:{},done:{},name:"",sid:"",lpaDone:false,guess:{s:null,p:null},err:{},mk:{q:"",old:"",a:"",r:"",e:""},rates:[0,0,0,0],pledge:"",quiz:null};
+let mode="s",PRINT="all";
+
+/* ---------- UTIL ---------- */
+const $=id=>document.getElementById(id);
+const words=t=>(String(t).trim().match(/\S+/g)||[]).length;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800)}
+function addPts(key,n){if(S.done[key])return;S.done[key]=1;S.pts+=n;$("pts").textContent=S.pts;toast("+"+n+" points!")}
+function award(id){if(S.badges[id])return;S.badges[id]=1;const b=BADGES.find(x=>x[0]===id);toast("🏅 Badge: "+b[2]);confetti();renderBadges()}
+function fb(id,ok,msg){const e=$(id);e.className="feedback show "+(ok?"ok":"no");e.innerHTML=msg}
+function speakText(t){if(!window.speechSynthesis){toast("Audio not available");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.9;speechSynthesis.speak(u)}
+
+/* ---------- NAV ---------- */
+function buildNav(){$("nav").innerHTML=PHASES.map((p,i)=>`<button onclick="go(${i})" id="nb${i}"><span class="ph">${p[2]}</span>${p[1]}</button>`).join("")}
+function go(i){PHASES.forEach((p,k)=>{$("s-"+p[0]).classList.toggle("active",k===i);$("nb"+k).classList.toggle("active",k===i)});if(i===7)renderCert();window.scrollTo({top:0,behavior:"smooth"})}
+function renderBadges(){const h=BADGES.map(b=>`<div class="badge ${S.badges[b[0]]?"on":""}"><div class="ic">${b[1]}</div><b>${b[2]}</b><br>${b[3]}</div>`).join("");$("badgeWall").innerHTML=h;$("badgeWall2").innerHTML=h;$("bcount").textContent=Object.keys(S.badges).length}
+
+/* ---------- LPA ---------- */
+function submitLPA(){if(!$("lpaDone").checked){fb("lpaFb",false,"Please finish LPA 6 and upload the PDF to Teams first, then tick the box.");return}
+ S.lpaDone=true;fb("lpaFb",true,"Great! LPA 6 is submitted. Now let's look at the class feedback.");addPts("lpa",30);award("lpa")}
+
+/* ---------- ENGAGE ---------- */
+function buildRC(){$("rcGrid").innerHTML=AREAS.map(a=>`<div class="rc" id="rc_${a.k}" onclick="pickRC('${a.k}')"><div class="ic">${a.ic}</div><div class="nm">${a.nm}</div><div class="grade ${a.c}">${a.g}</div><div class="det">${a.d}</div></div>`).join("")}
+function setMode(m){mode=m;$("mS").classList.toggle("on",m==="s");$("mP").classList.toggle("on",m==="p")}
+function pickRC(k){S.guess[mode]=k;AREAS.forEach(a=>{const e=$("rc_"+a.k);e.classList.toggle("vs",S.guess.s===a.k);e.classList.toggle("vp",S.guess.p===a.k)});if(mode==="s")setMode("p")}
+function reveal(){if(!S.guess.s||!S.guess.p){fb("rcFb",false,"Make both guesses first: one strongest area and one biggest problem.");return}
+ $("rcGrid").classList.add("revealed");let n=(S.guess.s==="prof")+(S.guess.p==="prep");
+ fb("rcFb",true,`You guessed ${n}/2 correctly. <b>Professionalism</b> was excellent 👏 and <b>preparedness</b> was the biggest problem.`);addPts("rc",10+n*5);award("guess")}
+
+/* ---------- SORT ---------- */
+let sortOrder=[],sortPick={};
+function buildSort(){sortOrder=shuffle(SORT.map((s,i)=>i));$("sortList").innerHTML=sortOrder.map(i=>`<div class="sitem" id="si${i}"><div class="q">Q: ${SORT[i][0]}</div><div class="a">"${SORT[i][1]}"</div><div class="opts"><button id="sb${i}s" onclick="pickSort(${i},'s')">🌊 Shallow</button><button id="sb${i}d" onclick="pickSort(${i},'d')">🔍 Deep</button></div><div class="why">💡 ${SORT[i][3]}</div></div>`).join("")}
+function pickSort(i,v){sortPick[i]=v;$("sb"+i+"s").classList.toggle("picked",v==="s");$("sb"+i+"d").classList.toggle("picked",v==="d");$("si"+i).className="sitem"}
+function checkSort(){let r=0;SORT.forEach((s,i)=>{const ok=sortPick[i]===s[2];$("si"+i).className="sitem "+(ok?"right":"wrong");if(ok)r++});
+ if(r===SORT.length){fb("sortFb",true,"All 8 correct! Deep answers have a reason and an example.");addPts("sort",20);award("depth")}
+ else fb("sortFb",false,`${r}/8 correct. Read the 💡 tips and try again.`)}
+
+/* ---------- ERROR HUNT ---------- */
+let errQ=[];
+function buildErr(){errQ=shuffle(ERR.map((e,i)=>i)).map(i=>{const idx=shuffle(ERR[i].o.map((o,k)=>k));return{i,o:idx.map(k=>ERR[i].o[k]),a:idx.indexOf(ERR[i].a)}});
+ $("errList").innerHTML=errQ.map((q,n)=>`<div class="err" id="er${n}"><div><b>${n+1}.</b> <span class="wrongs">❌ <s>${esc(ERR[q.i].w)}</s></span></div>${q.o.map((o,k)=>`<button class="eopt" onclick="ansErr(${n},${k},this)">${esc(o)}</button>`).join("")}<div class="tip">💡 ${esc(ERR[q.i].t)}</div></div>`).join("")}
+function ansErr(n,k,btn){if(S.err[n]!==undefined)return;const q=errQ[n];const box=$("er"+n);const bs=[...box.querySelectorAll(".eopt")];bs.forEach(b=>b.disabled=true);
+ const ok=k===q.a;S.err[n]=ok;btn.classList.add(ok?"right":"wrong");bs[q.a].classList.add("right");box.classList.add("done");
+ if(Object.keys(S.err).length===errQ.length){const r=Object.values(S.err).filter(Boolean).length;
+  if(r>=8){fb("errFb",true,`${r}/10 fixed! Great error hunting.`);addPts("err",r*2);award("err")}
+  else fb("errFb",false,`${r}/10 fixed. Read the tips, then click <b>Try again</b>. <button class="btn ghost" onclick="resetErr()">↺ Try again</button>`)}}
+function resetErr(){S.err={};buildErr();$("errFb").className="feedback"}
+
+/* ---------- EXTEND ---------- */
+function buildQpick(){$("qpick").innerHTML=MK_QS.map((q,i)=>`<button onclick="pickQ(${i},this)">${q}</button>`).join("")}
+function pickQ(i,b){[...$("qpick").children].forEach(x=>x.classList.remove("on"));b.classList.add("on");$("mkQ").value=MK_QS[i]}
+function countMk(){const n=words($("mkA").value+" "+$("mkR").value+" "+$("mkE").value);const w=$("mkWc");w.textContent=n+" words · target 50–90";w.className="wc"+(n>=50&&n<=90?" okc":"")}
+function saveMk(){S.mk={q:$("mkQ").value,old:$("mkOld").value,a:$("mkA").value,r:$("mkR").value,e:$("mkE").value};
+ if(!S.mk.q.trim()){fb("mkFb",false,"Choose or type the interview question first.");return}
+ const miss=[["Answer",S.mk.a],["Reason",S.mk.r],["Example",S.mk.e]].filter(x=>words(x[1])<4).map(x=>x[0]);
+ if(miss.length){fb("mkFb",false,"Please complete: "+miss.join(", "));return}
+ if(!/because|so |that's why|this is why/i.test(S.mk.r)){fb("mkFb",false,"Your Reason should use <b>because</b> (or <i>so / that's why</i>).");return}
+ const n=words(S.mk.a+" "+S.mk.r+" "+S.mk.e);
+ if(n<50){fb("mkFb",false,`Saved, but it has only ${n} words. Add more detail to your example (50–90).`);return}
+ fb("mkFb",true,"Excellent makeover! Now swap with a partner for a check.");addPts("mk",25);award("mk")}
+function partnerDone(){const c=[...document.querySelectorAll(".pc")].filter(x=>x.checked).length;
+ if(c<3){fb("pcFb",false,"Your partner's answer needs more work. Help them add what is missing, then check again.");return}
+ fb("pcFb",true,`${c}/5 ticked. Good teamwork!`);addPts("pc",10)}
+
+/* ---------- EVALUATE ---------- */
+function buildRates(){$("rateList").innerHTML=AREAS.map((a,i)=>`<div class="rate"><span><b>${a.ic} ${a.nm}</b></span><span class="lv" id="rl${i}">${[1,2,3,4].map(n=>`<button onclick="setRate(${i},${n})">${n}</button>`).join("")}</span></div>`).join("")}
+function setRate(i,n){S.rates[i]=n;[...$("rl"+i).children].forEach((b,k)=>b.classList.toggle("on",k===n-1));if(!S.rates.includes(0))addPts("rate",10)}
+function savePledge(){S.pledge=$("pledge").value;if(words(S.pledge)<8){fb("pledgeFb",false,"Make your pledge specific: what, when and how often? (8+ words)");return}fb("pledgeFb",true,"Pledge saved. Your teacher will check it when the video portfolio starts!");addPts("pledge",10)}
+let QZ=[],qi=0,qScore=0;
+function startQuiz(){QZ=shuffle(QUIZ).map(q=>{const idx=shuffle(q.o.map((o,i)=>i));return{q:q.q,o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a)}});qi=0;qScore=0;showQ()}
+function showQ(){$("qbar").style.width=(qi/QZ.length*100)+"%";
+ if(qi>=QZ.length){const pct=Math.round(qScore/QZ.length*100);S.quiz=Math.max(S.quiz||0,pct);
+  $("quizBox").innerHTML=`<p style="font-size:1.2rem"><b>Your score: ${qScore}/${QZ.length} (${pct}%)</b></p><p>${pct>=80?"🎉 Excellent! Your certificate is unlocked.":"You need 80% for the certificate. Try again!"}</p><button class="btn ghost" onclick="startQuiz()">↺ Try again</button>${pct>=80?'<button class="btn lime" onclick="go(7)">View certificate →</button>':""}`;
+  if(pct>=80){addPts("quiz",qScore*5);award("quiz")}return}
+ const q=QZ[qi];$("quizBox").innerHTML=`<p><b>Question ${qi+1} of ${QZ.length}</b></p><p style="font-size:1.08rem">${esc(q.q)}</p>`+q.o.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(${i},this)">${esc(o)}</button>`).join("")+`<div class="feedback" id="qFb"></div>`}
+function answerQ(i,btn){const q=QZ[qi];const opts=[...document.querySelectorAll(".quiz-opt")];opts.forEach(b=>b.disabled=true);
+ if(i===q.a){btn.classList.add("right");qScore++;fb("qFb",true,"Correct!")}else{btn.classList.add("wrong");opts[q.a].classList.add("right");fb("qFb",false,"Not quite. The correct answer is highlighted.")}
+ setTimeout(()=>{qi++;showQ()},1300)}
+
+/* ---------- CERT ---------- */
+function renderCert(){const ok=S.quiz!==null&&S.quiz>=80;const nm=$("sname").value||"Student";
+ $("certWrap").innerHTML=ok?`<div class="cert"><div style="font-size:2.4rem">🏆</div><h2>Certificate of Achievement</h2><p>This certifies that</p><div class="nm">${esc(nm)}</div><p>has completed the <b>Interview Debrief</b><br>LPA 6 reflection and feedback lesson</p><p>Quiz score: <b>${S.quiz}%</b> · Points: <b>${S.pts}</b> · Badges: <b>${Object.keys(S.badges).length}/6</b></p><p style="color:var(--muted)">${new Date().toLocaleDateString("en-GB")} · LSC 1503 · Designed by: Nazila Motahari</p></div>`
+ :`<div style="text-align:center"><div style="font-size:3rem">🔒</div><h2>Certificate locked</h2><p>Score <b>80% or more</b> on the check quiz to unlock your certificate.</p><button class="btn" onclick="go(6)">Go to the quiz</button></div>`}
+
+/* ---------- PRINT ---------- */
+function printMode(m){window.print()}
+function buildPrint(){S.name=$("sname").value;S.sid=$("sid").value;const P=(q,a)=>`<div class="pq">${esc(q)}</div><div class="pa">${esc(a)}</div>`;
+ const head=`<p><b>Name:</b> ${esc(S.name)} &nbsp; <b>ID/Class:</b> ${esc(S.sid)} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString("en-GB")}</p><p>LSC 1503 · Professional Spoken Communication</p>`;
+ let h=`<h1>Interview Debrief · My Work</h1>`+head+`<p>LPA 6 submitted on Teams: ${S.lpaDone?"Yes":"Not yet"}</p>`;
+ {
+  h+=`<h2>Answer Makeover</h2>`+P("Question",S.mk.q)+P("What I said in the interview",S.mk.old)+P("A · Answer",S.mk.a)+P("R · Reason",S.mk.r)+P("E · Example",S.mk.e);
+  h+=`<h2>Self-check (1–4)</h2>`+AREAS.map((a,i)=>P(a.nm,S.rates[i]?S.rates[i]+" / 4":"—")).join("");
+  h+=`<h2>My Preparation Pledge</h2>`+P("For my video portfolio, I will prepare by…",S.pledge);
+  h+=`<h2>Results</h2><p>Points: ${S.pts} · Quiz: ${S.quiz===null?"not taken":S.quiz+"%"} · Badges: ${BADGES.filter(b=>S.badges[b[0]]).map(b=>b[2]).join(", ")||"none"}</p>`;
+  if(S.quiz>=80){renderCert();h+=`<div class="pcert">${$("certWrap").innerHTML}</div>`}}
+ h+=`<p style="margin-top:20px;color:#666;font-size:9pt">Designed by: Nazila Motahari</p>`;$("printArea").innerHTML=h}
+window.addEventListener("beforeprint",buildPrint);
+window.addEventListener("afterprint",()=>{PRINT="all"});
+
+/* ---------- SAVE / LOAD ---------- */
+function collect(){S.name=$("sname").value;S.sid=$("sid").value;S.mk={q:$("mkQ").value,old:$("mkOld").value,a:$("mkA").value,r:$("mkR").value,e:$("mkE").value};S.pledge=$("pledge").value}
+function saveJSON(){collect();const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="InterviewDebrief_"+(S.name||"student").replace(/\s+/g,"_")+".json";a.click();toast("Progress saved!")}
+function loadJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);S=Object.assign(S,d);S.err={};
+ $("sname").value=S.name||"";$("sid").value=S.sid||"";$("lpaDone").checked=!!S.lpaDone;
+ $("mkQ").value=S.mk.q||"";$("mkOld").value=S.mk.old||"";$("mkA").value=S.mk.a||"";$("mkR").value=S.mk.r||"";$("mkE").value=S.mk.e||"";countMk();
+ S.rates.forEach((n,i)=>{if(n)[...$("rl"+i).children].forEach((b,k)=>b.classList.toggle("on",k===n-1))});$("pledge").value=S.pledge||"";
+ $("pts").textContent=S.pts;renderBadges();toast("Progress loaded!")}catch(err){toast("That file could not be loaded")}};r.readAsText(f);e.target.value=""}
+
+/* ---------- GLOSSARY ---------- */
+function buildGloss(){$("flips").innerHTML=GLOSS.map(g=>`<div class="flip" onclick="this.classList.toggle('on')"><div class="in"><div class="f">${g[0]}</div><div class="b">${g[1]}</div></div></div>`).join("")}
+function toggleGloss(s){$("gloss").classList.toggle("show",s)}
+
+/* ---------- CONFETTI ---------- */
+function confetti(){const c=$("conf"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cols=["#8CBF2F","#E2457A","#F2B33D","#233142","#5BC0EB"];
+ const P=Array.from({length:130},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.4,r:4+Math.random()*5,c:cols[Math.floor(Math.random()*5)],vy:2+Math.random()*3,vx:-1.5+Math.random()*3,a:Math.random()*6}));
+ let f=0;(function d(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.a+=.1;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);x.restore()});if(++f<170)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
+
+/* ---------- INIT ---------- */
+buildNav();buildRC();buildSort();buildErr();buildQpick();buildRates();buildGloss();renderBadges();startQuiz();go(0);
+</script>
+</body>
+</html>
